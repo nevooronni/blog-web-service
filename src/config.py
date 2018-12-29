@@ -18,9 +18,9 @@ class Production(object):
   DEBUG = False
   TESTING = False
   SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-  JWT_SECRET_KEY = OS.getenv('JWT_SECRET_KEY')
+  JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
-app.config = {
+app_config = {
   'development': Development,
-  'production': Production
+  'production': Production,
 }
