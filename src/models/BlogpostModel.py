@@ -4,7 +4,7 @@ from marshmallow import fields, Schema
 
 class BlogpostModel(db.Model):
   """
-    Blogpost Model
+  Blogpost Model
   """
 
   __tablename__ = 'blogposts'
@@ -16,44 +16,42 @@ class BlogpostModel(db.Model):
   created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
 
-def __init__(self, data):
-  self.title = data.get('title')
-  self.contents = data.get('contents')
-  self.owner_id = data.get('owner_id')
-  self.created_at = datetime.datetime.utcnow()
-  self.modified_at = datetime.datetime.utcnow()
+  def __init__(self, data):
+    self.title = data.get('title')
+    self.contents = data.get('contents')
+    self.owner_id = data.get('owner_id) # add this new line
+    self.created_at = datetime.datetime.utcnow()
+    self.modified_at = datetime.datetime.utcnow()
 
-def save(self):
-  db.session.add(self)
-  db.session.commit()
+  def save(self):
+    db.session.add(self)
+    db.session.commit()
 
-def update(self, data):
-  for key, item in data.items():
-    setattr(self, key, item)
-  self.modified_at = datetime.datetime.utcnow()
-  db.session.commit()
+  def update(self, data):
+    for key, item in data.items():
+      setattr(self, key, item)
+    self.modified_at = datetime.datetime.utcnow()
+    db.session.commit()
 
-def delete(self):
-  db.session.delete(self)
-  db.session.commit()
+  def delete(self):
+    db.session.delete(self)
+    de.session.commit()
+  
+  @staticmethod
+  def get_all_blogposts():
+    return BlogpostModel.query.all()
+  
+  @staticmethod
+  def get_one_blogpost(id):
+    return BlogpostModel.query.get(id)
 
-@staticmethod
-def get_all_blogposts():
-  return BlogpostModel.query.all()
+  def __repr__(self):
+    return '<id {}>'.format(self.id)
 
-@staticmethod
-def get_one_blogpost(id):
-  return BlogpostModel.query.get(id)
-
-def __repr__(self):
-  return '<id {}>'.format(self.id)
-
-#blogpost schema
-class BlogpostSchema(Schema):
+  class BlogpostSchema(Schema):
   """
-    Blogpost Schema
+  Blogpost Schema
   """
-
   id = fields.Int(dump_only=True)
   title = fields.Str(required=True)
   contents = fields.Str(required=True)

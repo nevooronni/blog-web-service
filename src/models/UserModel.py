@@ -1,34 +1,33 @@
 from marshmallow import fields, Schema
 import datetime
-from . import db #import db instance from models/__init__.py
-from ..app import bcrypt 
+from . import db
+from ..app import bcrypt
 from .BlogpostModel import BlogpostSchema
 
-#inherits from db.Model
 class UserModel(db.Model):
   """
-    User Model
+  User Model
   """
 
-  #table name
+  # table name
   __tablename__ = 'users'
 
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(128), nullable=False)
   email = db.Column(db.String(128), unique=True, nullable=False)
   password = db.Column(db.String(128), nullable=True)
-  created_at = db.Column(db.Datetime)
+  created_at = db.Column(db.DateTime)
   modified_at = db.Column(db.DateTime)
   blogposts = db.relationship('BlogpostModel', backref='users', lazy=True)
 
   # class constructor
   def __init__(self, data):
     """
-      class constructor
+    Class constructor
     """
     self.name = data.get('name')
     self.email = data.get('email')
-    self.password = self.__generete_hash(data.get('password')) #hashes created password
+    self.password = self.__generate_hash(data.get('password'))
     self.created_at = datetime.datetime.utcnow()
     self.modified_at = datetime.datetime.utcnow()
 
@@ -48,14 +47,6 @@ class UserModel(db.Model):
     db.session.delete(self)
     db.session.commit()
 
-  #hash password methods
-  def __generate_hash(self, password):
-    return bcrypt.__generate_password_hash(password, rounds=10).decode("utf-8")
-
-  def check_hash(self, password):
-    return bcrypt.check_password_hash(self.password, password) #use to validate when a user logs in later
-
-  #static methods as their name depicts to get all user from the db and to get a single user from the db using primary key and email field
   @staticmethod
   def get_all_users():
     return UserModel.query.all()
@@ -64,20 +55,23 @@ class UserModel(db.Model):
   def get_one_user(id):
     return UserModel.query.get(id)
 
-  #will return a printable representaion of UserModel object in this case returning only the id
-  def __repr__(self):
+  def __generate_hash(self, password):
+    return bcrypt.generate_password_hash(password, rounds=10).decode("utf-8")
+  
+  def check_hash(self, password):
+    return bcrypt.check_password_hash(self.password, password)
+
+  def __repr(self):
     return '<id {}>'.format(self.id)
-
-  #user schema
+  
   class UserSchema(Schema):
-    """
-      User Schema
-    """
-
-    id = fields.Int(dump_only=True)
-    name = fields.Str(required=True)
-    email = fields.Email(required=True)
-    password = fields.Str(required=True)
-    created_at = fields.DateTime(dump_only=True)
-    modified_at = fields.DateTime(dump_only=True)
-    blogposts = fields.Nested(BlogpostSchema, many=True)
+  """
+  User Schema
+  """
+  id = fields.Int(dump_only=True)
+  name = fields.Str(required=True)
+  email = fields.Email(required=True)
+  password = fields.Str(required=True)
+  created_at = fields.DateTime(dump_only=True)
+  modified_at = fields.DateTime(dump_only=True)
+  blogposts = fields.Nested(BlogpostSchema, many=True)
