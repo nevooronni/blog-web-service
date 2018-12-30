@@ -1,4 +1,4 @@
-from flask import request, json, Response, Blueprint
+from flask import request, json, Response, Blueprint, g
 from ..models.UserModel import UserModel, UserSchema
 from ..shared.Authentication import Auth
 
@@ -25,7 +25,7 @@ def create():
     message = {'error': 'User already exist, please supply another email address'}
     return custom_response(message, 400)  
 
-  user = UserSchema(data)
+  user = UserModel(data)
   user.save()
 
   ser_data = user_schema.dump(user).data
@@ -70,7 +70,7 @@ def get_all():
   ser_users = user_schema.dump(users, many=True).data 
   return custom_response(ser_users, 200)
 
-@user_api.route('/<int:user_id>', methods=['GET'])
+@user_api.route('/<int:user_id>', methods=['GET'])json web token 
 @Auth.auth_required
 def get_a_user(user_id):
   """
@@ -135,4 +135,3 @@ def custom_response(res, status_code):
     response=json.dumps(res),
     status=status_code
   )
-
