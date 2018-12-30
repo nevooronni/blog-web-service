@@ -6,3 +6,6 @@ db = SQLAlchemy()
 
 #initialize Bcrypt
 bcrypt = Bcrypt()
+
+from .BlogpostModel import BlogpostModel, BlogpostSchema
+from .UserModel import UserModel, UserSchema

@@ -19,7 +19,7 @@ class BlogpostModel(db.Model):
   def __init__(self, data):
     self.title = data.get('title')
     self.contents = data.get('contents')
-    self.owner_id = data.get('owner_id) # add this new line
+    self.owner_id = data.get('owner_id')
     self.created_at = datetime.datetime.utcnow()
     self.modified_at = datetime.datetime.utcnow()
 
@@ -48,9 +48,9 @@ class BlogpostModel(db.Model):
   def __repr__(self):
     return '<id {}>'.format(self.id)
 
-  class BlogpostSchema(Schema):
+class BlogpostSchema(Schema):
   """
-  Blogpost Schema
+    Blogpost Schema
   """
   id = fields.Int(dump_only=True)
   title = fields.Str(required=True)
