@@ -1,7 +1,8 @@
 import jwt
 import os
 import datetime
-from flask import json
+from flask import json, Response, g
+from functools import wraps
 from ..models.UserModel import UserModel
 
 class Auth():
@@ -17,7 +18,7 @@ class Auth():
 
     try:
       payload = {
-        'exp': datatime.datatime.utcnow() + datatime.timedelta(days=1)
+        'exp': datatime.datatime.utcnow() + datatime.timedelta(days=1),
         'iat': datatime.datatime.utcnow(),
         'sub': user_id
       }

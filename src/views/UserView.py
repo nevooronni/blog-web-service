@@ -54,7 +54,7 @@ def login():
   if not user:
     return custom_response({'error': 'invalid credentials'}, 400)
 
-  if not user.check_hash(data.get('password'))
+  if not user.check_hash(data.get('password')):
     return custom_response({'error': 'invalid credentials'}, 400)
 
   ser_data = user_schema.dump(user).data
@@ -102,7 +102,7 @@ def update():
   ser_user = user_schema.dump(user).data
   return custom_response(ser_user, 200)
 
-@user_api_route('/me', methods=['DELETE'])
+@user_api.route('/me', methods=['DELETE'])
 @Auth.auth_required
 def delete():
   """
