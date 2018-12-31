@@ -70,7 +70,7 @@ def get_all():
   ser_users = user_schema.dump(users, many=True).data 
   return custom_response(ser_users, 200)
 
-@user_api.route('/<int:user_id>', methods=['GET'])json web token 
+@user_api.route('/<int:user_id>', methods=['GET']) 
 @Auth.auth_required
 def get_a_user(user_id):
   """
